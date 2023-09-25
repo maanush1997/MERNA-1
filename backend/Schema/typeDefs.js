@@ -6,7 +6,7 @@ const typeDefs = gql`
         firstName:String
         lastName:String
         age:Int
-        dateOfJoining:date
+        dateOfJoining:String
         title:String
         department:String
         empType:String
@@ -16,6 +16,20 @@ const typeDefs = gql`
     hello: String
 
     getAllEmp:[Empyolee]
+  }
+  input empInput {
+    id:ID
+        firstName:String
+        lastName:String
+        age:Int
+        dateOfJoining:String
+        title:String
+        department:String
+        empType:String
+        currentStatus:Boolean
+  }
+  type Mutation {
+    createEmp(post:empInput ) :Empyolee
   }
 `;
 

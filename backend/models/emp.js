@@ -16,7 +16,7 @@ const Employee = mongoose.model(
             required: true,
         },
         dateOfJoining: {
-            type: Date,
+            type: String,
         },
         title: {
             type: String,
