@@ -1,36 +1,35 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-    type Empyolee {
-        id:ID
-        firstName:String
-        lastName:String
-        age:Int
-        dateOfJoining:String
-        title:String
-        department:String
-        empType:String
-        currentStatus:Boolean
-    }
+  type Employee {
+    id: ID
+    firstName: String
+    lastName: String
+    age: Int
+    dateOfJoining: String
+    title: String
+    department: String
+    empType: String
+    currentStatus: Boolean
+  }
   type Query {
     hello: String
-
-    getAllEmp:[Empyolee]
+    getAllEmp: [Employee]
   }
   input empInput {
-    id:ID
-        firstName:String
-        lastName:String
-        age:Int
-        dateOfJoining:String
-        title:String
-        department:String
-        empType:String
-        currentStatus:Boolean
+    id: ID
+    firstName: String
+    lastName: String
+    age: Int
+    dateOfJoining: String
+    title: String
+    department: String
+    empType: String
+    currentStatus: Boolean
   }
   type Mutation {
-    createEmp(post:empInput ) :Empyolee
+    createEmp(post: empInput): Employee
   }
 `;
 
-module.exports = typeDefs 
+module.exports = typeDefs;

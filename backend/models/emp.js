@@ -16,22 +16,22 @@ const Employee = mongoose.model(
             required: true,
         },
         dateOfJoining: {
-            type: String,
+            type: Date,
         },
         title: {
             type: String,
             required: true,
         },
         department: {
-            type: String
+            type: String,
         },
         empType: {
-            type: String
+            type: String,
         },
         currentStatus: {
             type: Boolean,
             default: 1,
         },
-    }),
-)
-module.exports = Employee
+    })
+);
+module.exports = Employee;
