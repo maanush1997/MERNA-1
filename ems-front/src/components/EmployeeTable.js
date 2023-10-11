@@ -13,7 +13,6 @@ const TABLE_HEAD = [
 ];
 
 export default function EmployeeTable({ tableData }) {
-  console.log("tableData: ", tableData);
   return tableData?.length > 0 ? (
     <table>
       <thead>

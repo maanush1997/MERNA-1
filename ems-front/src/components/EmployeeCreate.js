@@ -1,30 +1,22 @@
-import { useMutation } from "@apollo/client";
 import { CREATE_EMPLOYEE_MUTATION } from "../gql/mutations";
 import { GET_ALL_EMPLOYEES_QUERY } from "../gql/queries";
+import { Controller, useForm } from "react-hook-form";
 
 const TITLE_OPTIONS = ["Employee", "Manager", "Director", "VP"];
 const DEPARTMENT_OPTIONS = ["IT", "Marketing", "HR", "Engineering"];
 const EMPLOYMENT_TYPE = ["FullTime", "PartTime", "Contract", "Seasonal"];
 
 export default function EmployeeCreate({ handleClose }) {
-  const [createEmployee] = useMutation(CREATE_EMPLOYEE_MUTATION, {
+  const [createEmployee] = (CREATE_EMPLOYEE_MUTATION, {
     refetchQueries: [GET_ALL_EMPLOYEES_QUERY, "getAllEmp"],
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const elements = event.target?.elements;
-
+  const onSubmit = (data) => {
+    data.age = Number(data?.age)
     const requestBody = {
       post: {
-        age: parseInt(elements.age.value),
+        ...data,
         currentStatus: true,
-        dateOfJoining: elements.dateOfJoining?.value,
-        department: elements.department?.value,
-        empType: elements.employeeType?.value,
-        firstName: elements.firstName?.value,
-        lastName: elements.lastName?.value,
-        title: elements.title.value,
       },
     };
 
@@ -37,53 +29,89 @@ export default function EmployeeCreate({ handleClose }) {
       });
   };
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm()
+
+
   return (
-    <form onSubmit={handleSubmit} id="employeeForm">
+    <form onSubmit={handleSubmit(onSubmit)} id="employeeForm">
       <div>
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" width="100%" required autoComplete="off" />
+        <label>First Name:</label>
+        <input type="text" width="100%" {...register("firstName")} autoComplete="off" />
+        {errors.firstName && <span className="error-message">This field is required</span>}
       </div>
       <div>
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required autoComplete="off" />
+        <label>Last Name:</label>
+        <input type="text" {...register("lastName", { required: true })} autoComplete="off" />
+        {errors.lastName && <span className="error-message">This field is required</span>}
       </div>
       <div>
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="18" max="50" required autoComplete="off" />
+        <label>Age:</label>
+
+        <Controller
+          name="age"
+          control={control}
+          rules={{
+            required: 'This field is required',
+            min: {
+              value: 20,
+              message: 'Age greater than 20',
+            },
+            max: {
+              value: 70,
+              message: 'Age smaller than 70',
+            },
+          }}
+          render={({ field }) => (
+            <div>
+              <input type="number" {...field} />
+              {errors.age && <p className="error-message">{errors.age.message}</p>}
+            </div>
+          )}
+        />
+
       </div>
       <div>
-        <label for="dateOfJoining">Date of Joining:</label>
-        <input type="date" id="dateOfJoining" name="dateOfJoining" required autoComplete="off" />
+        <label>Date of Joining:</label>
+        <input type="date" {...register("dateOfJoining", { required: true })} autoComplete="off" />
+        {errors.dateOfJoining && <span className="error-message">This field is required</span>}
       </div>
       <div>
-        <label for="title">Title:</label>
-        <select id="title" name="title" required autoComplete="off">
+        <label>Title:</label>
+        <select {...register("title", { required: true })} autoComplete="off">
           {TITLE_OPTIONS.map((title) => (
             <option key={title} value={title}>
               {title}
             </option>
           ))}
         </select>
+        {errors.title && <span className="error-message">This field is required</span>}
       </div>
       <div>
-        <label for="department">Department:</label>
-        <select id="department" name="department" required autoComplete="off">
+        <label>Department:</label>
+        <select  {...register("department", { required: true })} autoComplete="off">
           {DEPARTMENT_OPTIONS.map((department) => (
             <option key={department} value={department}>
               {department}
             </option>
           ))}
         </select>
+        {errors.department && <span className="error-message">This field is required</span>}
       </div>
       <div>
-        <label for="employeeType">Employee Type:</label>
-        <select id="employeeType" name="employeeType" required>
+        <label>Employee Type:</label>
+        <select  {...register("empType", { required: true })}>
           {EMPLOYMENT_TYPE.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
         </select>
+        {errors.empType && <span className="error-message">This field is required</span>}
       </div>
       <div className="search">
         <button type="button" onClick={handleClose}>
